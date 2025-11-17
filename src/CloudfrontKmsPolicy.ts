@@ -27,7 +27,7 @@ export class CloudfrontKmsPolicy extends Construct {
     super(scope, id);
 
     // Create a Lambda function that will update the KMS key policy
-    const updatePolicyFunction = new KmsPolicyUpdaterFunction(this, 'KmsPolicyUpdaterFunction', {
+    const updatePolicyFunction = new KmsPolicyUpdaterFunction(this, 'riool-KmsPolicyUpdaterFunction', {
       description: 'Updates the KMS key policy to allow CloudFront to decrypt with it',
       logRetention: logs.RetentionDays.ONE_WEEK,
       timeout: cdk.Duration.minutes(1),
@@ -37,13 +37,13 @@ export class CloudfrontKmsPolicy extends Construct {
     props.kmsKey.grant(updatePolicyFunction, 'kms:GetKeyPolicy', 'kms:PutKeyPolicy');
 
     // Create a provider to handle the custom resource lifecycle
-    const provider = new cr.Provider(this, 'Provider', {
+    const provider = new cr.Provider(this, 'riool-Provider', {
       onEventHandler: updatePolicyFunction,
       logRetention: logs.RetentionDays.ONE_WEEK,
     });
 
     // Create a custom resource that will invoke the Lambda function
-    new CustomResource(this, 'UpdateKmsPolicy', {
+    new CustomResource(this, 'riool-UpdateKmsPolicy', {
       serviceToken: provider.serviceToken,
       properties: {
         KeyId: props.kmsKey.keyId,

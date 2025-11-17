@@ -40,9 +40,9 @@ export interface Configuration {
   backupEnvironment: Environment;
 
   /**
-   * Setup the buckets used for geo storage
+   * Setup the buckets used for riool storage
    */
-  buckets: GeoBucketConfig[];
+  buckets: RioolBucketConfig[];
 
   /**
    * A list of KMS Key ARNs that the backup role
@@ -63,7 +63,7 @@ export interface CloudFrontBucketConfig {
   exposeTroughCloudfront: boolean; //default false
   cloudfrontBasePath: string; //base path for the url of the bucket-contents
 }
-export interface GeoBucketConfig {
+export interface RioolBucketConfig {
   cdkId: string;
   name: string;
   /**
@@ -89,7 +89,7 @@ export const configurations: { [key: string]: Configuration } = {
     targetEnvironment: Statics.acceptanceEnvironment,
     backupEnvironment: Statics.backupEnvironmentAcceptance,
     buckets: getBucketConfig('acceptance'),
-    users: ['kaartviewer', 'fme'],
+    users: ['brutis'],
   },
   main: {
     branchName: 'main',
@@ -101,7 +101,7 @@ export const configurations: { [key: string]: Configuration } = {
     allowedToUseKmsKeyArns: [
       'arn:aws:kms:eu-west-1:751076321715:key/0e9efe8a-71b6-4218-b94d-8f9df0262674',
     ],
-    users: ['kaartviewer', 'fme'],
+    users: ['brutis'],
   },
 };
 
@@ -120,95 +120,17 @@ export function getConfiguration(buildBranch: string) {
  * @param branchName
  * @returns
  */
-export function getBucketConfig(branchName: string): GeoBucketConfig[] {
+export function getBucketConfig(branchName: string): RioolBucketConfig[] {
   return [
     {
-      cdkId: 'cyclorama-bucket',
-      name: Statics.cycloramaBucket(branchName, false),
-      backupName: Statics.cycloramaBucket(branchName, true),
-      description: 'Cyclorama data',
+      cdkId: 'riool-bucket',
+      name: Statics.rioolBucket(branchName, false),
+      backupName: Statics.rioolBucket(branchName, true),
+      description: 'Riool inspectie data',
       bucketConfiguration: {
         blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
         enforceSSL: true,
         versioned: true,
-      },
-    },
-    {
-      cdkId: 'obliek-bucket',
-      name: Statics.obliekBucket(branchName, false),
-      backupName: Statics.obliekBucket(branchName, true),
-      description: 'Obliek data',
-      bucketConfiguration: {
-        blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
-        enforceSSL: true,
-        versioned: true,
-      },
-    },
-    {
-      cdkId: 'ortho-bucket',
-      name: Statics.orthoBucket(branchName, false),
-      backupName: Statics.orthoBucket(branchName, true),
-      description: 'Ortho data',
-      bucketConfiguration: {
-        blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
-        enforceSSL: true,
-        versioned: true,
-      },
-    },
-    {
-      cdkId: 'lidar-airborne-bucket',
-      name: Statics.lidarAirborneBucket(branchName, false),
-      backupName: Statics.lidarAirborneBucket(branchName, true),
-      description: 'LiDAR airborne data',
-      bucketConfiguration: {
-        blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
-        enforceSSL: true,
-        versioned: true,
-      },
-    },
-    {
-      cdkId: 'lidar-terrestrisch-bucket',
-      name: Statics.lidarTerrestrischBucket(branchName, false),
-      backupName: Statics.lidarTerrestrischBucket(branchName, true),
-      description: 'LiDAR terrestrisch data',
-      bucketConfiguration: {
-        blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
-        enforceSSL: true,
-        versioned: true,
-      },
-    },
-    {
-      cdkId: 'mesh-bucket',
-      name: Statics.meshBucket(branchName, false),
-      backupName: Statics.meshBucket(branchName, true),
-      description: 'Mesh data',
-      bucketConfiguration: {
-        blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
-        enforceSSL: true,
-        versioned: true,
-      },
-      cloudfrontBucketConfig: {
-        exposeTroughCloudfront: true,
-        cloudfrontBasePath: 'mesh/*',
-      },
-    },
-    {
-      cdkId: 'kaartviewer-docs-bucket',
-      name: Statics.kaartViewerDocsBucket(branchName, false),
-      backupName: Statics.kaartViewerDocsBucket(branchName, true),
-      description: 'Kaartviewer documenten',
-      bucketConfiguration: {
-        blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
-        enforceSSL: true,
-        versioned: true,
-      },
-      cloudfrontBucketConfig: {
-        exposeTroughCloudfront: true,
-        cloudfrontBasePath: 'kvdocs/*',
-      },
-      iamUserAccess: {
-        kaartviewer: 'rw',
-        fme: 'rw',
       },
     },
   ];

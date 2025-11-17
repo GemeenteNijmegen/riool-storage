@@ -1,19 +1,19 @@
 export class Statics {
 
   /**
-     * Cloudfront and Route53 Zone ID and name for the zone for geo public buckets. decouples stacks to not pass
+     * Cloudfront and Route53 Zone ID and name for the zone for data public buckets. decouples stacks to not pass
      * the actual zone between stacks. This param is set by DNSStack and should not be modified after.
      */
   static readonly accountHostedZoneId: string = '/gemeente-nijmegen/account/hostedzone/id';
   static readonly accountHostedZoneName: string = '/gemeente-nijmegen/account/hostedzone/name';
   static readonly accountRootHostedZonePath: string = '/gemeente-nijmegen/account/hostedzone';
-  static readonly certificateArn: string = '/geo-storage/cloudfront/certificate/arn';
-  static readonly certificatePath: string = '/geo-storage/cloudfront/certificate';
+  static readonly certificateArn: string = '/riool-storage/cloudfront/certificate/arn';
+  static readonly certificatePath: string = '/riool-storage/cloudfront/certificate';
 
-  static readonly wafPath: string = '/cdk/geo-storage/waf';
-  static readonly ssmWafAclArn: string = '/cdk/geo-storage/waf/acl-arn';
+  static readonly wafPath: string = '/cdk/riool-storage/waf';
+  static readonly ssmWafAclArn: string = '/cdk/riool-storage/waf/acl-arn';
 
-  static readonly projectName = 'geo-storage';
+  static readonly projectName = 'riool-storage';
 
   static readonly gnBuildCodeStarConnectionArn = 'arn:aws:codestar-connections:eu-central-1:836443378780:connection/9d20671d-91bc-49e2-8680-59ff96e2ab11';
 
@@ -44,26 +44,20 @@ export class Statics {
 
 
   // SSM parameters
-  static readonly ssmGeoBucketsManagedPolicyArn = '/geo-storage/policies/geo-buckets-managment';
-  static readonly ssmBackupRoleArn = '/geo-storage/backup/role-arn';
-  static readonly ssmCloudfrontdomainName = '/geo-storage/cloudfront/domainName';
-  static readonly ssmCloudfrontDistributionId = '/geo-storage/cloudfront/distributionId';
-  static readonly ssmGeoStorageKmsKeyArn = '/geo-storage/kmskey/arn';
+  static readonly ssmRioolBucketsManagedPolicyArn = '/riool-storage/policies/riool-buckets-managment';
+  static readonly ssmBackupRoleArn = '/riool-storage/backup/role-arn';
+  static readonly ssmCloudfrontdomainName = '/riool-storage/cloudfront/domainName';
+  static readonly ssmCloudfrontDistributionId = '/riool-storage/cloudfront/distributionId';
+  static readonly ssmRioolStorageKmsKeyArn = '/riool-storage/kmskey/arn';
 
   // Statics
-  static readonly backupRoleName = 'backup-replication-role';
-  static readonly geoStorageOperatorrManagedPolicyName = 'geo-storage-operator-policy';
-  static readonly aliasBackupKmsKey = 'alias/geo-storage-backup-sse-key';
+  static readonly backupRoleName = 'riool-backup-replication-role';
+  static readonly rioolStorageOperatorrManagedPolicyName = 'riool-storage-operator-policy';
+  static readonly aliasBackupKmsKey = 'alias/riool-storage-backup-sse-key';
 
   // Bucket names
   static bucketBackupSuffix = (backup: boolean) => backup ? '-backup' : '';
-  static cycloramaBucket = (branch: string, backup: boolean) => `gemeentenijmegen-geo-cyclorama-${branch}${Statics.bucketBackupSuffix(backup)}`;
-  static meshBucket = (branch: string, backup: boolean) => `gemeentenijmegen-geo-mesh-${branch}${Statics.bucketBackupSuffix(backup)}`;
-  static obliekBucket = (branch: string, backup: boolean) => `gemeentenijmegen-geo-obliek-${branch}${Statics.bucketBackupSuffix(backup)}`;
-  static orthoBucket = (branch: string, backup: boolean) => `gemeentenijmegen-geo-ortho-${branch}${Statics.bucketBackupSuffix(backup)}`;
-  static lidarAirborneBucket = (branch: string, backup: boolean) => `gemeentenijmegen-geo-lidar-airborne-${branch}${Statics.bucketBackupSuffix(backup)}`;
-  static lidarTerrestrischBucket = (branch: string, backup: boolean) => `gemeentenijmegen-geo-lidar-terrestrisch-${branch}${Statics.bucketBackupSuffix(backup)}`;
-  static kaartViewerDocsBucket = (branch: string, backup: boolean) => `gemeentenijmegen-kaartviewer-docs-${branch}${Statics.bucketBackupSuffix(backup)}`; //#909
+  static rioolBucket = (branch: string, backup: boolean) => `gemeentenijmegen-riool-${branch}${Statics.bucketBackupSuffix(backup)}`;
 
   // Variable statics (pun intented)
   static readonly landingzonePlatformOperatorRoleArn = (accountId: string, region: string) => `arn:aws:iam::${accountId}:role/aws-reserved/sso.amazonaws.com/${region}/AWSReservedSSO_lz-platform-operator_*`;

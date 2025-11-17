@@ -19,30 +19,19 @@ test('StackHasBuckets', () => {
       targetEnvironment: testEnv,
       backupEnvironment: testEnv,
       buckets: getBucketConfig('test'),
-      users: ['kaartviewer', 'fme'],
+      users: ['brutis'],
     },
   });
 
   const template = Template.fromStack(stack);
-  template.resourceCountIs('AWS::S3::Bucket', 8);
+  template.resourceCountIs('AWS::S3::Bucket', 2);
 });
 
 
 test('Bucket names (without backup)', () => {
-  expect(Statics.cycloramaBucket('test', false)).toBe('gemeentenijmegen-geo-cyclorama-test');
-  expect(Statics.meshBucket('test', false)).toBe('gemeentenijmegen-geo-mesh-test');
-  expect(Statics.obliekBucket('test', false)).toBe('gemeentenijmegen-geo-obliek-test');
-  expect(Statics.orthoBucket('test', false)).toBe('gemeentenijmegen-geo-ortho-test');
-  expect(Statics.lidarAirborneBucket('test', false)).toBe('gemeentenijmegen-geo-lidar-airborne-test');
-  expect(Statics.lidarTerrestrischBucket('test', false)).toBe('gemeentenijmegen-geo-lidar-terrestrisch-test');
+  expect(Statics.rioolBucket('test', false)).toBe('gemeentenijmegen-riool-test');
 });
 
 test('Bucket names (with backup)', () => {
-  expect(Statics.cycloramaBucket('test', true)).toBe('gemeentenijmegen-geo-cyclorama-test-backup');
-  expect(Statics.meshBucket('test', true)).toBe('gemeentenijmegen-geo-mesh-test-backup');
-  expect(Statics.obliekBucket('test', true)).toBe('gemeentenijmegen-geo-obliek-test-backup');
-  expect(Statics.orthoBucket('test', true)).toBe('gemeentenijmegen-geo-ortho-test-backup');
-  expect(Statics.lidarAirborneBucket('test', true)).toBe('gemeentenijmegen-geo-lidar-airborne-test-backup');
-  expect(Statics.lidarTerrestrischBucket('test', true)).toBe('gemeentenijmegen-geo-lidar-terrestrisch-test-backup');
-  expect(Statics.kaartViewerDocsBucket('test', true)).toBe('gemeentenijmegen-kaartviewer-docs-test-backup');
+  expect(Statics.rioolBucket('test', true)).toBe('gemeentenijmegen-riool-test-backup');
 });

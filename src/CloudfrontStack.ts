@@ -25,7 +25,7 @@ export class CloudfrontStack extends Stack {
     // Create CORS headers policy for allowed domains
     // AND a custom response headers policy with Cache-Control header
     this.responseHeadersPolicy = new ResponseHeadersPolicy(this, 'CorsHeadersPolicy', {
-      responseHeadersPolicyName: 'GeoStorageCorsPolicy',
+      responseHeadersPolicyName: 'RioolStorageCorsPolicy',
       corsBehavior: {
         accessControlAllowOrigins: [
           '*.nijmegen.nl',
@@ -160,7 +160,7 @@ export class CloudfrontStack extends Stack {
 
     // Retrieve KMS key and add CloudFront access policy
     const key = Key.fromKeyArn(this, 'EncryptionKey',
-      ssm.StringParameter.valueForStringParameter(this, Statics.ssmGeoStorageKmsKeyArn));
+      ssm.StringParameter.valueForStringParameter(this, Statics.ssmRioolStorageKmsKeyArn));
 
     // Create custom resource to add policy to KMS key allowing CloudFront to decrypt
     new CloudfrontKmsPolicy(this, 'KmsPolicy', {
@@ -174,7 +174,7 @@ export class CloudfrontStack extends Stack {
         const uniqueId = `${bucketSettings.cdkId}-cf`;
         const bucket = Bucket.fromBucketAttributes(this, uniqueId, {
           bucketName: bucketSettings.name,
-          encryptionKey: Key.fromKeyArn(this, `${uniqueId}-key`, ssm.StringParameter.valueForStringParameter(this, Statics.ssmGeoStorageKmsKeyArn)),
+          encryptionKey: Key.fromKeyArn(this, `${uniqueId}-key`, ssm.StringParameter.valueForStringParameter(this, Statics.ssmRioolStorageKmsKeyArn)),
         });
 
         //this doesn't work for existing buckets

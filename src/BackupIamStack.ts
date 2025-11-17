@@ -23,7 +23,7 @@ export class BackupIamStack extends Stack {
 
     const role = new iam.Role(this, 'backup-role', {
       assumedBy: new iam.ServicePrincipal('s3.amazonaws.com'),
-      description: 'Role used for replication objects in the geo buckets to the backup account',
+      description: 'Role used for replication objects in the data buckets to the backup account',
       roleName: Statics.backupRoleName,
     });
 
@@ -100,7 +100,7 @@ export class BackupIamStack extends Stack {
     const crossAccountReplicationRolePolicy = new iam.PolicyDocument({ statements });
 
     // Attatch the policy to the role
-    const policy = new iam.Policy(this, 'policy', {
+    const policy = new iam.Policy(this, 'ca-replication-policy', {
       document: crossAccountReplicationRolePolicy,
     });
     role.attachInlinePolicy(policy);

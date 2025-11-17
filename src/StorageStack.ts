@@ -108,12 +108,12 @@ export class StorageStack extends Stack {
 
   setupKmsSseKey(backupRole: iam.IRole) {
     const key = new kms.Key(this, 'bucket-key', {
-      description: 'SSE key for geo storage buckets',
-      alias: 'geo-storage-sse-key',
+      description: 'SSE key for riool storage buckets',
+      alias: 'storage-sse-key',
     });
     new ssm.StringParameter(this, 'ssm-kmskey-arn', {
       stringValue: key.keyArn,
-      parameterName: Statics.ssmGeoStorageKmsKeyArn,
+      parameterName: Statics.ssmRioolStorageKmsKeyArn,
     });
 
     // Allow lz-platform-operator read rights
@@ -262,11 +262,11 @@ export class StorageStack extends Stack {
 
   createBucketAccessPolicy(buckets: s3.IBucket[], key: kms.Key) {
     const policy = new iam.ManagedPolicy(this, 'bucket-access-policy', {
-      description: 'Allows read/write access to all GEO storage buckets',
-      managedPolicyName: Statics.geoStorageOperatorrManagedPolicyName,
+      description: 'Allows read/write access to all Riool storage buckets',
+      managedPolicyName: Statics.rioolStorageOperatorrManagedPolicyName,
       statements: [
         new iam.PolicyStatement({
-          sid: 'AllowListBucketOnGeoBuckets',
+          sid: 'AllowListBucketOnRioolBuckets',
           effect: iam.Effect.ALLOW,
           actions: [
             's3:ListBucket',
@@ -274,7 +274,7 @@ export class StorageStack extends Stack {
           resources: buckets.map(b => b.bucketArn),
         }),
         new iam.PolicyStatement({
-          sid: 'AllowToManageObjectsInGeoBuckets',
+          sid: 'AllowToManageObjectsInRioolBuckets',
           effect: iam.Effect.ALLOW,
           actions: [
             's3:*Object', // Allow get, delete and put
@@ -307,7 +307,7 @@ export class StorageStack extends Stack {
 
     new ssm.StringParameter(this, 'bucket-access-policy-ssm', {
       stringValue: policy.managedPolicyArn,
-      parameterName: Statics.ssmGeoBucketsManagedPolicyArn,
+      parameterName: Statics.ssmRioolBucketsManagedPolicyArn,
     });
 
   }

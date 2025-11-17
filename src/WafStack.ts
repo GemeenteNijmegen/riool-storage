@@ -29,14 +29,14 @@ export class WafStack extends Stack {
       addresses: ['145.11.60.1/32'], //must be in a cidr notation
     });
 
-    const acl = new aws_wafv2.CfnWebACL(this, 'waf-geoStorage', {
+    const acl = new aws_wafv2.CfnWebACL(this, 'waf-rioolStorage', {
       defaultAction: { allow: {} },
-      description: 'used for public GeoStorage buckets',
-      name: 'geoStorageWaf',
+      description: 'used for public RioolStorage buckets',
+      name: 'rioolStorageWaf',
       visibilityConfig: {
         sampledRequestsEnabled: true,
         cloudWatchMetricsEnabled: true,
-        metricName: 'geoStorage-web-acl',
+        metricName: 'rioolStorage-web-acl',
       },
       rules: [
         // Allow rule for trusted IPs with specific origin header
@@ -230,7 +230,7 @@ export class WafStack extends Stack {
    */
   private logGroupArn() {
     const logGroup = new LogGroup(this, 'waf-logs', {
-      logGroupName: 'aws-waf-logs-geoStorage',
+      logGroupName: 'aws-waf-logs-rioolStorage',
     });
 
     const logGroupArn = this.formatArn({

@@ -8,7 +8,7 @@ const configuration = getConfiguration(buildBranch);
 
 const app = new App();
 
-new PipelineStack(app, `geo-storage-pipeline-stack-${configuration.branchName}`, {
+new PipelineStack(app, `riool-storage-pipeline-stack-${configuration.branchName}`, {
   env: configuration.deploymentEnvironment,
   configuration: configuration,
 });
