@@ -126,11 +126,14 @@ export function getBucketConfig(branchName: string): RioolBucketConfig[] {
       cdkId: 'riool-bucket',
       name: Statics.rioolBucket(branchName, false),
       backupName: Statics.rioolBucket(branchName, true),
-      description: 'Riool inspectie data',
+      description: 'Riool inspectie video data',
       bucketConfiguration: {
         blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
         enforceSSL: true,
         versioned: true,
+      },
+      iamUserAccess: {
+        brutis: 'rw',
       },
     },
   ];

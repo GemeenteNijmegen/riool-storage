@@ -3,11 +3,8 @@ import { Aspects, Stage, StageProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { BackupIamStack } from './BackupIamStack';
 import { BackupStack } from './BackupStack';
-import { CloudfrontStack } from './CloudfrontStack';
 import { Configurable } from './Configuration';
 import { StorageStack } from './StorageStack';
-import { UsEastStack } from './UsEastStack';
-import { WafStack } from './WafStack';
 
 
 export interface StorageStageProps extends StageProps, Configurable { }
@@ -29,22 +26,6 @@ export class StorageStage extends Stage {
       configuration: props.configuration,
     });
 
-    const wafStack = new WafStack(this, 'riool-waf-stack', {
-      env: { region: 'us-east-1' },
-      branch: props.configuration.branchName,
-    });
-
-    const cloudFrontStack = new CloudfrontStack(this, 'riool-cloudfront-stack', {
-      configuration: props.configuration,
-    });
-
-    // Deploy resources that must exist in us-east-1
-    const usEastStack = new UsEastStack(this, 'riool-us-east-stack', {
-      env: { region: 'us-east-1' },
-      accountHostedZoneRegion: 'eu-central-1',
-    });
-
-
     const backupStack = new BackupStack(this, `${props.configuration.branchName}-riool-backup`, {
       env: props.configuration.backupEnvironment,
       configuration: props.configuration,
@@ -52,9 +33,6 @@ export class StorageStage extends Stage {
 
     storageStack.addDependency(backupIamStack);
     storageStack.addDependency(backupStack);
-    cloudFrontStack.addDependency(storageStack);
-    cloudFrontStack.addDependency(usEastStack);
-    cloudFrontStack.addDependency(wafStack);
 
   }
 
