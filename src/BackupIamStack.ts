@@ -23,7 +23,7 @@ export class BackupIamStack extends Stack {
 
     const role = new iam.Role(this, 'backup-role', {
       assumedBy: new iam.ServicePrincipal('s3.amazonaws.com'),
-      description: 'Role used for replication objects in the data buckets to the backup account',
+      description: 'Role used for replication objects in the riool buckets to the backup account',
       roleName: Statics.backupRoleName,
     });
 
