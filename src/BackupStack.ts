@@ -61,12 +61,19 @@ export class BackupStack extends Stack {
       alias: Statics.aliasBackupKmsKey,
     });
 
+    // Use AccountPrincipal with condition for cross-account access
+    // This avoids the "invalid principal" error when the role doesn't exist yet
     key.addToResourcePolicy(
       new iam.PolicyStatement({
         effect: iam.Effect.ALLOW,
         actions: ['kms:Encrypt', 'kms:Decrypt', 'kms:ReEncrypt*', 'kms:GenerateDataKey', 'kms:GenerateDataKey*'],
         resources: ['*'],
-        principals: [new iam.ArnPrincipal(`arn:aws:iam::${props.configuration.targetEnvironment.account}:role/${Statics.backupRoleName}`)],
+        principals: [new iam.AccountPrincipal(props.configuration.targetEnvironment.account)],
+        conditions: {
+          StringLike: {
+            'aws:PrincipalArn': `arn:aws:iam::${props.configuration.targetEnvironment.account}:role/${Statics.backupRoleName}`,
+          },
+        },
       }),
     );
 
