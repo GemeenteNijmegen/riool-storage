@@ -51,7 +51,7 @@ export class Statics {
   static readonly ssmRioolStorageKmsKeyArn = '/riool-storage/kmskey/arn';
 
   // Statics
-  static readonly backupRoleName = 'riool-backup-replication-role';
+  static readonly backupRoleName = 'backup-replication-role';
   static readonly rioolStorageOperatorrManagedPolicyName = 'riool-storage-operator-policy';
   static readonly aliasBackupKmsKey = 'alias/riool-storage-backup-sse-key';
 

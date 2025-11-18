@@ -23,7 +23,7 @@ export class WafStack extends Stack {
     // Define trusted IPs for which the WAF rules won't be executed
     // IRvN external ip, needs to change when requesting app changes to SaaS provider
     const trustedIps = new aws_wafv2.CfnIPSet(this, 'TrustedIPs', {
-      name: 'TrustedIPSet',
+      name: 'RioolStorageTrustedIPSet',
       scope: 'CLOUDFRONT',
       ipAddressVersion: 'IPV4',
       addresses: ['145.11.60.1/32'], //must be in a cidr notation
