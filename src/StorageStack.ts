@@ -187,7 +187,7 @@ export class StorageStack extends Stack {
             },
           },
           deleteMarkerReplication: {
-            status: 'Disabled', // Prevent deletion for now
+            status: 'Enabled', // Replicate delete markers to backup
           },
         },
       ],
@@ -252,7 +252,8 @@ export class StorageStack extends Stack {
   /**
    * Create a lifecycle rule that:
    *  - moves objects to the INTELLIGENT_TIERING storage class after 0 days.
-   *  - removes non current versions after 7 days.
+   *  - removes non current versions after 30 days.
+   *  - removes expired delete markers automatically.
    * @returns the lifecyle rule
    */
   createLifecycleRule(): s3.LifecycleRule {
@@ -262,7 +263,8 @@ export class StorageStack extends Stack {
         storageClass: s3.StorageClass.INTELLIGENT_TIERING,
         transitionAfter: Duration.days(0), // On create
       }],
-      noncurrentVersionExpiration: Duration.days(1),
+      noncurrentVersionExpiration: Duration.days(365), // Keep old versions for 365 days
+      expiredObjectDeleteMarker: true, // Automatically remove expired delete markers
     };
   }
 
