@@ -76,8 +76,12 @@ export interface RioolBucketConfig {
 
   /**
    * Define which users have access to the bucket
+   * r = read only
+   * w = write only
+   * rw = read and write (no delete)
+   * rwd = read, write and delete
    */
-  iamUserAccess?: Record<string, 'r' | 'w' | 'rw'>;
+  iamUserAccess?: Record<string, 'r' | 'w' | 'rw' | 'rwd'>;
 }
 
 
@@ -89,7 +93,7 @@ export const configurations: { [key: string]: Configuration } = {
     targetEnvironment: Statics.acceptanceEnvironment,
     backupEnvironment: Statics.backupEnvironmentAcceptance,
     buckets: getBucketConfig('acceptance'),
-    users: ['brutis'],
+    users: ['brutis', 'supplier'],
   },
   main: {
     branchName: 'main',
@@ -101,7 +105,7 @@ export const configurations: { [key: string]: Configuration } = {
     allowedToUseKmsKeyArns: [
       'arn:aws:kms:eu-west-1:751076321715:key/0e9efe8a-71b6-4218-b94d-8f9df0262674',
     ],
-    users: ['brutis'],
+    users: ['brutis', 'supplier'],
   },
 };
 
@@ -133,7 +137,8 @@ export function getBucketConfig(branchName: string): RioolBucketConfig[] {
         versioned: true,
       },
       iamUserAccess: {
-        brutis: 'rw',
+        brutis: 'rwd',    // Full access: read, write, delete
+        supplier: 'rw',   // Limited access: read, write (no delete)
       },
     },
   ];

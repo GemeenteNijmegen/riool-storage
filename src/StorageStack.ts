@@ -73,7 +73,13 @@ export class StorageStack extends Stack {
           } else if (rights == 'w') {
             bucket.grantWrite(user);
           } else if (rights == 'rw') {
+            // Read and write without delete
+            bucket.grantRead(user);
+            bucket.grantPut(user);
+          } else if (rights == 'rwd') {
+            // Full access including delete
             bucket.grantReadWrite(user);
+            bucket.grantDelete(user);
           }
         });
       }
