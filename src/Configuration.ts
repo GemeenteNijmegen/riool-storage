@@ -137,8 +137,8 @@ export function getBucketConfig(branchName: string): RioolBucketConfig[] {
         versioned: true,
       },
       iamUserAccess: {
-        brutis: 'rwd',    // Full access: read, write, delete
-        supplier: 'rw',   // Limited access: read, write (no delete)
+        brutis: 'rwd', // Full access: read, write, delete
+        supplier: 'rw', // Limited access: read, write (no delete)
       },
     },
   ];
