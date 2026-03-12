@@ -3,7 +3,7 @@ const project = new GemeenteNijmegenCdkApp({
   cdkVersion: '2.195.0',
   defaultReleaseBranch: 'main',
   devDeps: ['@gemeentenijmegen/projen-project-type'],
-  name: 'geo-storage',
+  name: 'riool-storage',
   deps: [
     '@gemeentenijmegen/aws-constructs',
     'cdk-remote-stack',

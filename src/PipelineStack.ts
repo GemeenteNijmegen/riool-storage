@@ -23,7 +23,7 @@ export class PipelineStack extends Stack {
 
     const pipeline = this.pipeline(props);
 
-    const storageStage = new StorageStage(this, 'geo-storage', {
+    const storageStage = new StorageStage(this, 'riool-storage', {
       env: props.configuration.targetEnvironment,
       configuration: props.configuration,
     });
@@ -33,12 +33,12 @@ export class PipelineStack extends Stack {
 
   pipeline(props: PipelineStackProps): pipelines.CodePipeline {
 
-    const source = pipelines.CodePipelineSource.connection('GemeenteNijmegen/geo-storage', this.branchName, {
+    const source = pipelines.CodePipelineSource.connection('GemeenteNijmegen/riool-storage', this.branchName, {
       connectionArn: props.configuration.codeStarConnectionArn,
     });
 
-    const pipeline = new pipelines.CodePipeline(this, `geo-storage-${this.branchName}`, {
-      pipelineName: `geo-storage-${this.branchName}-pipeline`,
+    const pipeline = new pipelines.CodePipeline(this, `riool-storage-${this.branchName}`, {
+      pipelineName: `riool-storage-${this.branchName}-pipeline`,
       crossAccountKeys: true,
       synth: new pipelines.ShellStep('Synth', {
         input: source,

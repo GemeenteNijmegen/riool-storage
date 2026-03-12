@@ -3,11 +3,8 @@ import { Aspects, Stage, StageProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { BackupIamStack } from './BackupIamStack';
 import { BackupStack } from './BackupStack';
-import { CloudfrontStack } from './CloudfrontStack';
 import { Configurable } from './Configuration';
 import { StorageStack } from './StorageStack';
-import { UsEastStack } from './UsEastStack';
-import { WafStack } from './WafStack';
 
 
 export interface StorageStageProps extends StageProps, Configurable { }
@@ -19,42 +16,23 @@ export class StorageStage extends Stage {
 
     Aspects.of(this).add(new PermissionsBoundaryAspect());
 
-    const backupIamStack = new BackupIamStack(this, `${props.configuration.branchName}-backup-iam`, {
+    const backupIamStack = new BackupIamStack(this, `${props.configuration.branchName}-riool-backup-iam`, {
       env: props.configuration.targetEnvironment,
       configuration: props.configuration,
     });
 
-    const storageStack = new StorageStack(this, 'data-stack', {
+    const storageStack = new StorageStack(this, 'riool-data-stack', {
       env: props.configuration.targetEnvironment,
       configuration: props.configuration,
     });
 
-    const wafStack = new WafStack(this, 'waf-stack', {
-      env: { region: 'us-east-1' },
-      branch: props.configuration.branchName,
-    });
-
-    const cloudFrontStack = new CloudfrontStack(this, 'cloudfront-stack', {
-      configuration: props.configuration,
-    });
-
-    // Deploy resources that must exist in us-east-1
-    const usEastStack = new UsEastStack(this, 'us-east-stack', {
-      env: { region: 'us-east-1' },
-      accountHostedZoneRegion: 'eu-central-1',
-    });
-
-
-    const backupStack = new BackupStack(this, `${props.configuration.branchName}-backup`, {
+    const backupStack = new BackupStack(this, `${props.configuration.branchName}-riool-backup`, {
       env: props.configuration.backupEnvironment,
       configuration: props.configuration,
     });
 
     storageStack.addDependency(backupIamStack);
     storageStack.addDependency(backupStack);
-    cloudFrontStack.addDependency(storageStack);
-    cloudFrontStack.addDependency(usEastStack);
-    cloudFrontStack.addDependency(wafStack);
 
   }
 

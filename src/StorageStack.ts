@@ -73,7 +73,13 @@ export class StorageStack extends Stack {
           } else if (rights == 'w') {
             bucket.grantWrite(user);
           } else if (rights == 'rw') {
+            // Read and write without delete
+            bucket.grantRead(user);
+            bucket.grantPut(user);
+          } else if (rights == 'rwd') {
+            // Full access including delete
             bucket.grantReadWrite(user);
+            bucket.grantDelete(user);
           }
         });
       }
@@ -108,12 +114,12 @@ export class StorageStack extends Stack {
 
   setupKmsSseKey(backupRole: iam.IRole) {
     const key = new kms.Key(this, 'bucket-key', {
-      description: 'SSE key for geo storage buckets',
-      alias: 'geo-storage-sse-key',
+      description: 'SSE key for riool storage buckets',
+      alias: 'storage-sse-key',
     });
     new ssm.StringParameter(this, 'ssm-kmskey-arn', {
       stringValue: key.keyArn,
-      parameterName: Statics.ssmGeoStorageKmsKeyArn,
+      parameterName: Statics.ssmRioolStorageKmsKeyArn,
     });
 
     // Allow lz-platform-operator read rights
@@ -181,7 +187,7 @@ export class StorageStack extends Stack {
             },
           },
           deleteMarkerReplication: {
-            status: 'Disabled', // Prevent deletion for now
+            status: 'Enabled', // Replicate delete markers to backup
           },
         },
       ],
@@ -246,7 +252,8 @@ export class StorageStack extends Stack {
   /**
    * Create a lifecycle rule that:
    *  - moves objects to the INTELLIGENT_TIERING storage class after 0 days.
-   *  - removes non current versions after 7 days.
+   *  - removes non current versions after 30 days.
+   *  - removes expired delete markers automatically.
    * @returns the lifecyle rule
    */
   createLifecycleRule(): s3.LifecycleRule {
@@ -256,17 +263,18 @@ export class StorageStack extends Stack {
         storageClass: s3.StorageClass.INTELLIGENT_TIERING,
         transitionAfter: Duration.days(0), // On create
       }],
-      noncurrentVersionExpiration: Duration.days(1),
+      noncurrentVersionExpiration: Duration.days(365), // Keep old versions for 365 days
+      expiredObjectDeleteMarker: true, // Automatically remove expired delete markers
     };
   }
 
   createBucketAccessPolicy(buckets: s3.IBucket[], key: kms.Key) {
     const policy = new iam.ManagedPolicy(this, 'bucket-access-policy', {
-      description: 'Allows read/write access to all GEO storage buckets',
-      managedPolicyName: Statics.geoStorageOperatorrManagedPolicyName,
+      description: 'Allows read/write access to all Riool storage buckets',
+      managedPolicyName: Statics.rioolStorageOperatorrManagedPolicyName,
       statements: [
         new iam.PolicyStatement({
-          sid: 'AllowListBucketOnGeoBuckets',
+          sid: 'AllowListBucketOnRioolBuckets',
           effect: iam.Effect.ALLOW,
           actions: [
             's3:ListBucket',
@@ -274,7 +282,7 @@ export class StorageStack extends Stack {
           resources: buckets.map(b => b.bucketArn),
         }),
         new iam.PolicyStatement({
-          sid: 'AllowToManageObjectsInGeoBuckets',
+          sid: 'AllowToManageObjectsInRioolBuckets',
           effect: iam.Effect.ALLOW,
           actions: [
             's3:*Object', // Allow get, delete and put
@@ -307,7 +315,7 @@ export class StorageStack extends Stack {
 
     new ssm.StringParameter(this, 'bucket-access-policy-ssm', {
       stringValue: policy.managedPolicyArn,
-      parameterName: Statics.ssmGeoBucketsManagedPolicyArn,
+      parameterName: Statics.ssmRioolBucketsManagedPolicyArn,
     });
 
   }
