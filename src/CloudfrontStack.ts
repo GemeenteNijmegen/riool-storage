@@ -1,3 +1,4 @@
+import { RemoteParameters } from '@gemeentenijmegen/cross-region-parameters';
 import { Duration, RemovalPolicy, Stack, aws_ssm, StackProps, aws_ssm as ssm } from 'aws-cdk-lib';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { Distribution, PriceClass, SecurityPolicyProtocol, AccessLevel, ViewerProtocolPolicy, CachePolicy, AllowedMethods, ResponseHeadersPolicy, HeadersFrameOption, HeadersReferrerPolicy, OriginRequestPolicy } from 'aws-cdk-lib/aws-cloudfront';
@@ -7,7 +8,6 @@ import { AaaaRecord, ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-r
 import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
 import { BlockPublicAccess, Bucket, BucketEncryption, IBucket, ObjectOwnership } from 'aws-cdk-lib/aws-s3';
 import { BucketDeployment, Source } from 'aws-cdk-lib/aws-s3-deployment';
-import { RemoteParameters } from 'cdk-remote-stack';
 import { Construct } from 'constructs';
 import { CloudfrontKmsPolicy } from './CloudfrontKmsPolicy';
 import { Configurable, Configuration } from './Configuration';
