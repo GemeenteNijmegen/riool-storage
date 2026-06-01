@@ -4,6 +4,7 @@ const project = new GemeenteNijmegenCdkApp({
   defaultReleaseBranch: 'main',
   devDeps: [],
   name: 'riool-storage',
+  nvmNodeVersion: '24',
   deps: [
     '@gemeentenijmegen/projen-project-type',
     '@gemeentenijmegen/aws-constructs',
