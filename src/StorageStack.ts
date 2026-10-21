@@ -107,6 +107,16 @@ export class StorageStack extends Stack {
     const bucketArns = buckets.map(bucket => bucket.bucketArn);
     this.setupManagementUser(bucketArns, sseKey.keyArn);
 
+    // Allow the configured per-user IAM users to list only the riool buckets
+    Object.values(users).forEach(user => {
+      user.addToPolicy(new iam.PolicyStatement({
+        sid: 'AllowToListRioolBuckets',
+        effect: iam.Effect.ALLOW,
+        actions: ['s3:ListBucket'],
+        resources: bucketArns,
+      }));
+    });
+
     this.createBucketAccessPolicy(buckets, sseKey);
     this.setupDataDownloadAlarms(buckets);
 
@@ -380,12 +390,6 @@ export class StorageStack extends Stack {
     new Secret(this, `${id}-user-secret`, {
       secretStringValue: key.secretAccessKey,
     });
-    user.addToPolicy(new iam.PolicyStatement({
-      sid: 'AllowToListTheBucketsInTheAccount',
-      effect: iam.Effect.ALLOW,
-      actions: ['s3:ListAllMyBuckets'],
-      resources: ['*'],
-    }));
     return user;
   }
 

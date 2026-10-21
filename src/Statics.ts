@@ -57,7 +57,7 @@ export class Statics {
 
   // Bucket names
   static bucketBackupSuffix = (backup: boolean) => backup ? '-backup' : '';
-  static rioolBucket = (branch: string, backup: boolean) => `gemeentenijmegen-riool-${branch}${Statics.bucketBackupSuffix(backup)}`;
+  static rioolBucket = (branch: string, backup: boolean) => `brutis-nijmegen-besteknummer-2023-17-${branch}${Statics.bucketBackupSuffix(backup)}`;
 
   // Variable statics (pun intented)
   static readonly landingzonePlatformOperatorRoleArn = (accountId: string, region: string) => `arn:aws:iam::${accountId}:role/aws-reserved/sso.amazonaws.com/${region}/AWSReservedSSO_lz-platform-operator_*`;

@@ -14,7 +14,12 @@
   "parserOptions": {
     "ecmaVersion": 2018,
     "sourceType": "module",
-    "project": "./tsconfig.dev.json"
+    "projectService": {
+      "allowDefaultProject": [
+        ".projenrc.js"
+      ],
+      "defaultProject": "./tsconfig.json"
+    }
   },
   "extends": [
     "plugin:import/typescript"
@@ -29,7 +34,7 @@
     "import/resolver": {
       "node": {},
       "typescript": {
-        "project": "./tsconfig.dev.json",
+        "project": "./tsconfig.json",
         "alwaysTryTypes": true
       }
     }
@@ -153,7 +158,8 @@
           "**/test/**",
           "**/build-tools/**",
           "src/lambda/kms-policy-updater.lambda.ts",
-          "src/lambda/s3-bucket-policy-updater.lambda.ts"
+          "src/lambda/s3-bucket-policy-updater.lambda.ts",
+          ".projenrc.js"
         ],
         "optionalDependencies": false,
         "peerDependencies": true
