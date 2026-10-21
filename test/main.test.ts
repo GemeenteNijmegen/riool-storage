@@ -29,9 +29,9 @@ test('StackHasBuckets', () => {
 
 
 test('Bucket names (without backup)', () => {
-  expect(Statics.rioolBucket('test', false)).toBe('gemeentenijmegen-riool-test');
+  expect(Statics.rioolBucket('test', false)).toBe('brutis-nijmegen-besteknummer-2023-17-test');
 });
 
 test('Bucket names (with backup)', () => {
-  expect(Statics.rioolBucket('test', true)).toBe('gemeentenijmegen-riool-test-backup');
+  expect(Statics.rioolBucket('test', true)).toBe('brutis-nijmegen-besteknummer-2023-17-test-backup');
 });
