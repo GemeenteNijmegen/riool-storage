@@ -115,6 +115,16 @@ export class StorageStack extends Stack {
         actions: ['s3:ListBucket'],
         resources: bucketArns,
       }));
+      // Allow listing all buckets in the account. Required by client tooling
+      // (e.g. the supplier import module) that enumerates buckets before
+      // opening a specific one. s3:ListAllMyBuckets does not support
+      // resource-level restrictions, so it must be granted on '*'.
+      user.addToPolicy(new iam.PolicyStatement({
+        sid: 'AllowToListAllBuckets',
+        effect: iam.Effect.ALLOW,
+        actions: ['s3:ListAllMyBuckets'],
+        resources: ['*'],
+      }));
     });
 
     this.createBucketAccessPolicy(buckets, sseKey);
